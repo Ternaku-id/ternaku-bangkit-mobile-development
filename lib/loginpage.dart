@@ -155,7 +155,6 @@ class _LoginPageState extends State<LoginPage> {
                     child: Text("Don't Have an Account? Register Here"),
                   ),
                 ),
-                // Tambahkan widget SizedBox setelah TextButton untuk memberi ruang di bawahnya saat keypad muncul
                 SizedBox(height: MediaQuery.of(context).viewInsets.bottom),
               ],
             ),

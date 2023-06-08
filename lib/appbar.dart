@@ -14,10 +14,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         child: Container(
           height: appBarHeight,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center, // Pusatkan logo
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                'assets/logoputih.png', // Ganti dengan path gambar logo Anda
+                'assets/logoputih.png',
                 height: 50.0,
                 // width: 50.0, // Atur lebar logo jika diperlukan
               ),
@@ -41,7 +41,7 @@ class LoginAppBar extends StatelessWidget implements PreferredSizeWidget {
       decoration: BoxDecoration(
         image: DecorationImage(
           image: AssetImage(
-            'assets/loginappbar.png', // Replace with your PNG image path
+            'assets/loginappbar.png',
           ),
           fit: BoxFit.cover,
         ),
