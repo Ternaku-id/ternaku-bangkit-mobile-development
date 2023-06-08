@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Ternaku',
       theme: ThemeData(
-        primarySwatch: Colors.green, // Update the primarySwatch to green
+        primarySwatch: Colors.green,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: LoginPage(),

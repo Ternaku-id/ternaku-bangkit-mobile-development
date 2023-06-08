@@ -140,42 +140,51 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget buildHaloCard() {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      elevation: 4.0,
-      child: Container(
-        padding: EdgeInsets.all(20.0),
-        decoration: BoxDecoration(
+    return Center(
+      // Tambahkan widget Center di luar Card
+      child: Card(
+        shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.white.withOpacity(0.5),
-              spreadRadius: 2,
-              blurRadius: 5,
-              offset: Offset(0, 3),
-            ),
-          ],
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Halo! ${widget.fullname}',
-              style: TextStyle(
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
+        elevation: 4.0,
+        child: Container(
+          padding: EdgeInsets.all(20.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.white.withOpacity(0.5),
+                spreadRadius: 2,
+                blurRadius: 5,
+                offset: Offset(0, 3),
               ),
-            ),
-            SizedBox(height: 10),
-            Text(
-              'Selamat datang di Ternaku',
-              style: TextStyle(
-                fontSize: 16.0,
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                // Tambahkan widget Center di dalam Column
+                child: Text(
+                  'Halo! ${widget.fullname}',
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
-            ),
-          ],
+              SizedBox(height: 10),
+              Center(
+                // Tambahkan widget Center di dalam Column
+                child: Text(
+                  'Selamat datang di Ternaku',
+                  style: TextStyle(
+                    fontSize: 16.0,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -198,7 +207,7 @@ class _HomePageState extends State<HomePage> {
           onTap: () {
             showModalBottomSheet(
               context: context,
-              isScrollControlled: true, // Perbesar ukuran showModalBottomSheet
+              isScrollControlled: true,
               builder: (BuildContext context) {
                 return Container(
                   height: MediaQuery.of(context).size.height *
@@ -312,22 +321,30 @@ class _HomePageState extends State<HomePage> {
           },
           child: Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0),
-              color: Colors.grey[200],
+              borderRadius: BorderRadius.circular(20.0),
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5), // Warna bayangan
+                  spreadRadius: 2, // Jarak penyebaran bayangan
+                  blurRadius: 2, // Besar kabur bayangan
+                  offset: Offset(0, 2), // Offset (dx, dy) bayangan
+                ),
+              ],
             ),
             padding: EdgeInsets.all(16.0),
             child: Row(
               children: [
                 Icon(
                   Icons.camera_alt,
-                  size: 40,
+                  size: 25,
                   color: Colors.green,
                 ),
                 SizedBox(width: 16.0),
                 Text(
                   'Scan Mata Hewan',
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 17,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -453,7 +470,7 @@ class _HomePageState extends State<HomePage> {
         ),
         bottomNavigationBar: Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Colors.green,
             boxShadow: [
               BoxShadow(
                 blurRadius: 20,
@@ -854,8 +871,7 @@ class _ScanPageState extends State<ScanPage> {
       final url =
           Uri.parse('${widget.backendUrl}/api/predict${widget.animalType}');
       final request = http.MultipartRequest('POST', url);
-      request.headers['Authorization'] =
-          'Bearer ${widget.token}'; // Tambahkan token ke header
+      request.headers['Authorization'] = 'Bearer ${widget.token}';
       request.files
           .add(await http.MultipartFile.fromPath('image', _imageFile!.path));
       final response = await request.send();
