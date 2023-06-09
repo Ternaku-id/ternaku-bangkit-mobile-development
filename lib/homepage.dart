@@ -360,45 +360,52 @@ class _HomePageState extends State<HomePage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Artikel',
-              style: TextStyle(
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
-              ),
-              textAlign: TextAlign.left,
-            ),
-            if (articles != null)
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          AllArticlesPage(articles: articles!),
-                    ),
-                  );
-                },
-                child: Text(
-                  'Lihat semua',
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    color: Colors.grey,
-                  ),
-                  textAlign: TextAlign.right,
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 0.5),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Artikel',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
                 ),
+                textAlign: TextAlign.left,
               ),
-          ],
+              if (articles != null)
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            AllArticlesPage(articles: articles!),
+                      ),
+                    );
+                  },
+                  child: Text(
+                    'Lihat semua',
+                    style: TextStyle(
+                      fontSize: 14.0,
+                      color: Colors.grey,
+                    ),
+                    textAlign: TextAlign.right,
+                  ),
+                ),
+            ],
+          ),
         ),
-        SizedBox(height: 20),
+        SizedBox(height: 5),
         if (articles != null)
           Container(
             height: 200,
-            child: ListView.builder(
+            child: PageView.builder(
+              controller: PageController(
+                viewportFraction: 0.8,
+              ),
               scrollDirection: Axis.horizontal,
+              physics: PageScrollPhysics(parent: BouncingScrollPhysics()),
               itemCount: articles!.length,
               itemBuilder: (context, index) {
                 final article = articles![index];
@@ -409,24 +416,37 @@ class _HomePageState extends State<HomePage> {
                   child: Container(
                     margin: EdgeInsets.only(right: 10.0),
                     width: 200,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Image.network(
-                          article['img_url'],
-                          height: 120,
-                          width: double.infinity,
-                          fit: BoxFit.cover,
-                        ),
-                        SizedBox(height: 8.0),
-                        Text(
-                          article['title'],
-                          style: TextStyle(
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.bold,
+                    child: Card(
+                      elevation: 2.0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(8.0),
+                            ),
+                            child: Image.network(
+                              article['img_url'],
+                              height: 120,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                            ),
                           ),
-                        ),
-                      ],
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                              article['title'],
+                              style: TextStyle(
+                                fontSize: 11.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 );
@@ -457,65 +477,65 @@ class _HomePageState extends State<HomePage> {
     return WillPopScope(
       onWillPop: onBackPressed,
       child: Scaffold(
-        appBar: CustomAppBar(),
-        body: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) {
-            return ListView(
-              padding: EdgeInsets.all(20.0),
-              children: [
-                buildSection(),
-              ],
-            );
-          },
-        ),
-        bottomNavigationBar: Container(
-          decoration: BoxDecoration(
-            color: Colors.green,
-            boxShadow: [
-              BoxShadow(
-                blurRadius: 20,
-                color: Colors.black.withOpacity(.1),
-              )
-            ],
-          ),
-          child: SafeArea(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
-              child: GNav(
-                selectedIndex: _selectedIndex,
-                onTabChange: _onItemTapped,
-                rippleColor: Colors.grey[300]!,
-                hoverColor: Colors.grey[100]!,
-                gap: 8,
-                activeColor: _colorScheme.primary,
-                iconSize: 24,
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                duration: Duration(milliseconds: 400),
-                tabBackgroundColor: _colorScheme.surface,
-                color: _colorScheme.onSurface.withOpacity(0.6),
-                tabs: [
-                  GButton(
-                    icon: Icons.home,
-                    text: 'Homepage',
-                  ),
-                  GButton(
-                    icon: Icons.store,
-                    text: 'Products',
-                  ),
-                  GButton(
-                    icon: Icons.history,
-                    text: 'History',
-                  ),
-                  GButton(
-                    icon: Icons.person,
-                    text: 'Profile',
-                  ),
+          appBar: CustomAppBar(),
+          body: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              return ListView(
+                padding: EdgeInsets.all(20.0),
+                children: [
+                  buildSection(),
                 ],
+              );
+            },
+          ),
+          bottomNavigationBar: Container(
+            decoration: BoxDecoration(
+              color: Colors.green,
+              boxShadow: [
+                BoxShadow(
+                  blurRadius: 20,
+                  color: Colors.black.withOpacity(.1),
+                )
+              ],
+            ),
+            child: SafeArea(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+                child: GNav(
+                  selectedIndex: _selectedIndex,
+                  onTabChange: _onItemTapped,
+                  rippleColor: Colors.grey[300]!,
+                  hoverColor: Colors.grey[100]!,
+                  gap: 8,
+                  activeColor: _colorScheme.primary,
+                  iconSize: 24,
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  duration: Duration(milliseconds: 400),
+                  tabBackgroundColor: _colorScheme.surface,
+                  color: _colorScheme.onSurface.withOpacity(0.6),
+                  tabs: [
+                    GButton(
+                      icon: Icons.home,
+                      text: 'Homepage',
+                    ),
+                    GButton(
+                      icon: Icons.store,
+                      text: 'Products',
+                    ),
+                    GButton(
+                      icon: Icons.history,
+                      text: 'History',
+                    ),
+                    GButton(
+                      icon: Icons.person,
+                      text: 'Profile',
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-      ),
+          backgroundColor: Colors.white),
     );
   }
 
