@@ -53,6 +53,12 @@ class _HistoryPageState extends State<HistoryPage> {
                     },
                     isActive: filter == 'Kambing',
                   ),
+                  IconButton(
+                    icon: Icon(Icons.refresh),
+                    onPressed: () {
+                      widget.onRefresh();
+                    },
+                  ),
                 ],
               ),
             ),
@@ -71,7 +77,6 @@ class _HistoryPageState extends State<HistoryPage> {
                   return Card(
                     child: ListTile(
                       onTap: () {
-                        // Navigasi ke halaman detail
                         navigateToDetailPage(context, item);
                       },
                       leading: Image.asset(
