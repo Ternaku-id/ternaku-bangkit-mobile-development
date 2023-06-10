@@ -23,7 +23,7 @@ class _LoginPageState extends State<LoginPage> {
 
     try {
       Response response = await dio.post(
-        'https://ternaku-dev-test.et.r.appspot.com/api/auth/login',
+        'https://ternaku-production.et.r.appspot.com/api/auth/login',
         data: {
           'email': emailController.text,
           'password': passwordController.text,
@@ -226,7 +226,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
     try {
       Response response = await dio.post(
-        'https://ternaku-dev-test.et.r.appspot.com/api/auth/register',
+        'https://ternaku-production.et.r.appspot.com/api/auth/register',
         data: {
           'email': email,
           'password': password,
