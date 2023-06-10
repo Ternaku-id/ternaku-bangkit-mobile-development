@@ -13,29 +13,46 @@ class ArticlePage extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              article['title'],
-              style: TextStyle(
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                article['title'],
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            SizedBox(height: 16.0),
-            Text(
-              article['content'],
-              style: TextStyle(fontSize: 16.0),
-            ),
-            SizedBox(height: 16.0),
-            Image.network(
-              article['img_url'],
-              height: 200,
-              width: double.infinity,
-              fit: BoxFit.cover,
-            ),
-          ],
+              SizedBox(height: 16.0),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Published Date: ${article['published_date']}',
+                    style: TextStyle(fontSize: 14.0),
+                  ),
+                  SizedBox(height: 8.0),
+                  Text(
+                    'Author: ${article['author']}',
+                    style: TextStyle(fontSize: 14.0),
+                  ),
+                ],
+              ),
+              SizedBox(height: 16.0),
+              Text(
+                article['content'],
+                style: TextStyle(fontSize: 16.0),
+              ),
+              SizedBox(height: 16.0),
+              Image.network(
+                article['img_url'],
+                height: 300,
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
+            ],
+          ),
         ),
       ),
     );

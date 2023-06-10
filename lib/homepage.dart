@@ -93,27 +93,27 @@ class _HomePageState extends State<HomePage> {
     try {
       // Fetch Profile Information
       Response profileResponse = await dio.get(
-        'https://ternaku-dev-test.et.r.appspot.com/api/profile',
+        'https://ternaku-production.et.r.appspot.com/api/profile',
         options: Options(headers: {'Authorization': 'Bearer ${widget.token}'}),
       );
       profile = profileResponse.data['profile'];
 
       // Fetch Products
       Response productsResponse = await dio.get(
-        'https://ternaku-dev-test.et.r.appspot.com/api/products',
+        'https://ternaku-production.et.r.appspot.com/api/products',
         options: Options(headers: {'Authorization': 'Bearer ${widget.token}'}),
       );
       products = productsResponse.data;
 
       // Fetch History
       Response historyResponse = await dio.get(
-        'https://ternaku-dev-test.et.r.appspot.com/api/profile/history',
+        'https://ternaku-production.et.r.appspot.com/api/profile/history',
         options: Options(headers: {'Authorization': 'Bearer ${widget.token}'}),
       );
       history = historyResponse.data['history'];
 
       Response response = await dio.get(
-        'https://ternaku-dev-test.et.r.appspot.com/api/articles',
+        'https://ternaku-production.et.r.appspot.com/api/articles',
       );
       articles = response.data['articles'];
       setState(() {});
@@ -440,7 +440,7 @@ class _HomePageState extends State<HomePage> {
                             child: Text(
                               article['title'],
                               style: TextStyle(
-                                fontSize: 11.0,
+                                fontSize: 13.0,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -554,7 +554,7 @@ class _HomePageState extends State<HomePage> {
       MaterialPageRoute(
         builder: (context) => ScanPage(
           animalType: animalType,
-          backendUrl: 'https://ternaku-dev-test.et.r.appspot.com',
+          backendUrl: 'https://ternaku-production.et.r.appspot.com',
           token: widget.token,
         ),
       ),
@@ -828,6 +828,7 @@ class ScanPage extends StatefulWidget {
   final String animalType;
   final String backendUrl;
   final String token;
+
   ScanPage({
     required this.animalType,
     required this.backendUrl,
@@ -855,23 +856,45 @@ class _ScanPageState extends State<ScanPage> {
     });
   }
 
-  void _showResultDialog(String result) {
+  void _showLoadingDialog() {
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Hasil Prediksi'),
-          content: Text(result),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Tutup'),
+        return Dialog(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CircularProgressIndicator(),
+                SizedBox(height: 16.0),
+                Text(
+                  'Please Wait ...Your photos are being analyzed',
+                  style: TextStyle(fontSize: 18),
+                ),
+              ],
             ),
-          ],
+          ),
         );
       },
+    );
+  }
+
+  void _hideLoadingDialog() {
+    Navigator.pop(context);
+  }
+
+  void _showResultPage(String result) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ResultPage(
+          animalType: widget.animalType,
+          imageFile: _imageFile!,
+          result: result,
+        ),
+      ),
     );
   }
 
@@ -887,6 +910,8 @@ class _ScanPageState extends State<ScanPage> {
       _isLoading = true;
     });
 
+    _showLoadingDialog();
+
     try {
       final url =
           Uri.parse('${widget.backendUrl}/api/predict${widget.animalType}');
@@ -901,7 +926,8 @@ class _ScanPageState extends State<ScanPage> {
       if (response.statusCode == 200) {
         final decodedData = json.decode(responseString);
         final result = decodedData['class'];
-        _showResultDialog(result);
+        _hideLoadingDialog();
+        _showResultPage(result);
       } else {
         throw Exception('Failed to predict image.');
       }
@@ -909,6 +935,7 @@ class _ScanPageState extends State<ScanPage> {
       setState(() {
         _error = 'Failed to predict image.';
       });
+      _hideLoadingDialog();
     } finally {
       setState(() {
         _isLoading = false;
@@ -957,6 +984,50 @@ class _ScanPageState extends State<ScanPage> {
                 _error!,
                 style: TextStyle(color: Colors.red, fontSize: 18),
               ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ResultPage extends StatelessWidget {
+  final String animalType;
+  final File imageFile;
+  final String result;
+
+  ResultPage({
+    required this.animalType,
+    required this.imageFile,
+    required this.result,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Result Predict'),
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.file(
+              imageFile,
+              width: 200,
+              height: 200,
+            ),
+            SizedBox(height: 16.0),
+            Text(
+              'Animal Type: $animalType',
+              style: TextStyle(fontSize: 18),
+            ),
+            SizedBox(height: 16.0),
+            Text(
+              'Prediction Result: $result',
+              style: TextStyle(fontSize: 18),
+            ),
           ],
         ),
       ),
