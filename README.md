@@ -81,6 +81,5 @@ Contributions to the Ternaku mobile app development are welcome. If you would li
 
 This project is licensed under the MIT License - see the [LICENSE](https://github.com/Ternaku-id/ternaku-bangkit-mobile-development/blob/main/LICENSE) file for details.
 
-## Acknowledgements
-
-The Ternaku mobile app is developed as part of the Bangkit Academy 2023 program.
+## Disclaimer
+-   This project is created for educational purpose as the requirement to graduate from [**_Bangkit Academy led by Google, Tokopedia, Gojek, & Traveloka_**.](https://www.linkedin.com/company/bangkit-academy/mycompany/)
